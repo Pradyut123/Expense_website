@@ -109,7 +109,7 @@ function Auth({ onAuthSuccess }) {
   };
 
   return (
-    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100vh', width: '100%' }}>
+    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100vh', width: '100%', padding: '0 20px' }}>
       <div className="glass-panel" style={{ width: '100%', maxWidth: '400px', padding: '2rem', textAlign: 'center' }}>
         <ShieldCheck size={48} color="var(--accent-primary)" style={{ margin: '0 auto 1.5rem auto' }} />
         <h2 style={{ fontSize: '1.5rem', marginBottom: '0.5rem', fontWeight: 600 }}>

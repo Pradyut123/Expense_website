@@ -60,8 +60,8 @@ function ExpenseChart({ transactions }) {
               data={expenseData}
               cx="50%"
               cy="50%"
-              innerRadius={70}
-              outerRadius={100}
+              innerRadius={60}
+              outerRadius={85}
               paddingAngle={5}
               dataKey="value"
               stroke="none"

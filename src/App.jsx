@@ -4,6 +4,7 @@ import Dashboard from './components/Dashboard';
 import MonthView from './components/MonthView';
 import UserProfile from './components/UserProfile';
 import Auth from './components/Auth';
+import { Menu, X } from 'lucide-react';
 import { client } from './sanityClient';
 import './App.css';
 
@@ -21,6 +22,7 @@ function App() {
   const [activeTab, setActiveTab] = useState('home');
   const [editingTransaction, setEditingTransaction] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [isSidebarOpen, setSidebarOpen] = useState(false);
   
   // Specific states for the Monthly View tab
   const [filterMonth, setFilterMonth] = useState(new Date().getMonth());
@@ -123,13 +125,23 @@ function App() {
     <div className="app-layout">
       <Sidebar 
         activeTab={activeTab}
-        setActiveTab={setActiveTab}
+        setActiveTab={(tab) => {
+          setActiveTab(tab);
+          setSidebarOpen(false); // Close on mobile after selection
+        }}
         onLogout={handleLogout}
+        isOpen={isSidebarOpen}
+        onClose={() => setSidebarOpen(false)}
       />
       
       <main className="main-content-area">
         <header className="app-header">
-          <h1>Finance Tracker</h1>
+          <div className="header-left">
+            <button className="mobile-menu-btn" onClick={() => setSidebarOpen(true)}>
+              <Menu size={24} />
+            </button>
+            <h1>Finance Tracker</h1>
+          </div>
           <div className="user-profile">
             <div className="profile-info" style={{ textAlign: 'right' }}>
               <strong>{user.name}</strong>

@@ -1,12 +1,17 @@
 import React from 'react';
-import { BookOpen, Home, BarChart2, LogOut } from 'lucide-react';
+import { BookOpen, Home, BarChart2, LogOut, X } from 'lucide-react';
 
-function Sidebar({ activeTab, setActiveTab, onLogout }) {
+function Sidebar({ activeTab, setActiveTab, onLogout, isOpen, onClose }) {
   return (
-    <aside className="app-sidebar glass-panel">
+    <aside className={`app-sidebar glass-panel ${isOpen ? 'open' : ''}`}>
       <div className="sidebar-header">
-        <BookOpen size={24} color="var(--accent-primary)" />
-        <h2>Ledger</h2>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+          <BookOpen size={24} color="var(--accent-primary)" />
+          <h2>Ledger</h2>
+        </div>
+        <button className="mobile-close-btn" onClick={onClose}>
+          <X size={24} />
+        </button>
       </div>
 
       <div className="sidebar-actions">
