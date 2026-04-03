@@ -33,10 +33,10 @@ function Dashboard({
 
       <div className="side-column">
         <ExpenseForm 
-          onAdd={addTransaction} 
-          onUpdate={updateTransaction}
+          addTransaction={addTransaction} 
+          updateTransaction={updateTransaction}
           editingTransaction={editingTransaction}
-          clearEdit={() => setEditingTransaction(null)}
+          setEditingTransaction={setEditingTransaction}
         />
       </div>
     </div>

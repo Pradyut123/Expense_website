@@ -15,7 +15,7 @@ const categoryIcons = {
   Other: <HelpCircle size={20} />
 };
 
-function ExpenseList({ transactions, onDelete }) {
+function ExpenseList({ transactions, onDelete, onEdit }) {
   if (transactions.length === 0) {
     return (
       <div className="glass-panel list-card" style={{ marginTop: '2rem' }}>

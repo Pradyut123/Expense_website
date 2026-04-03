@@ -7,7 +7,7 @@ const CATEGORIES = {
   income: ['Salary', 'Freelance', 'Investments', 'Gift', 'Other']
 };
 
-function ExpenseForm({ onAdd, onUpdate, editingTransaction, clearEdit }) {
+function ExpenseForm({ addTransaction, updateTransaction, editingTransaction, setEditingTransaction }) {
   const [title, setTitle] = useState('');
   const [amount, setAmount] = useState('');
   const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
@@ -40,7 +40,7 @@ function ExpenseForm({ onAdd, onUpdate, editingTransaction, clearEdit }) {
     if (!title || !amount || parseFloat(amount) <= 0) return;
 
     if (editingTransaction) {
-      onUpdate({
+      updateTransaction({
         ...editingTransaction, // keep original id
         title,
         amount: parseFloat(amount),
@@ -49,9 +49,8 @@ function ExpenseForm({ onAdd, onUpdate, editingTransaction, clearEdit }) {
         category,
         notes
       });
-      clearEdit();
     } else {
-      onAdd({
+      addTransaction({
         id: uuidv4(),
         title,
         amount: parseFloat(amount),
@@ -71,19 +70,15 @@ function ExpenseForm({ onAdd, onUpdate, editingTransaction, clearEdit }) {
     setCategory(CATEGORIES[newType][0]);
   };
 
-  return (
-    <div className="glass-panel form-card">
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem', borderBottom: '1px solid var(--panel-border)', paddingBottom: '0.75rem' }}>
-        <h2 style={{ fontSize: '1.25rem', fontWeight: 600, margin: 0, border: 'none', padding: 0 }}>
-          {editingTransaction ? 'Edit Transaction' : 'Add Transaction'}
-        </h2>
-        
-        {editingTransaction && (
-          <button onClick={clearEdit} style={{ background: 'transparent', color: 'var(--text-muted)' }} title="Cancel Edit">
-            <X size={20} />
-          </button>
-        )}
-      </div>
+  const formContent = (
+    <>
+      {!editingTransaction && (
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem', borderBottom: '1px solid var(--panel-border)', paddingBottom: '0.75rem' }}>
+          <h2 style={{ fontSize: '1.25rem', fontWeight: 600, margin: 0, border: 'none', padding: 0 }}>
+            Add Transaction
+          </h2>
+        </div>
+      )}
 
       <form onSubmit={handleSubmit}>
         <div className="form-group" style={{ marginBottom: '1.5rem' }}>
@@ -156,10 +151,33 @@ function ExpenseForm({ onAdd, onUpdate, editingTransaction, clearEdit }) {
           ></textarea>
         </div>
 
-        <button type="submit" className="btn-primary" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}>
-          {editingTransaction ? <><Save size={20} /> Save Changes</> : <><PlusCircle size={20} /> Add Transaction</>}
-        </button>
+        <div style={{ display: 'flex', gap: '1rem', marginTop: '1rem' }}>
+          <button type="submit" className="btn-primary" style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}>
+            {editingTransaction ? <><Save size={20} /> Save Changes</> : <><PlusCircle size={20} /> Add Transaction</>}
+          </button>
+          
+          {editingTransaction && (
+            <button 
+              type="button" 
+              className="all-time-btn" 
+              onClick={() => setEditingTransaction(null)}
+              style={{ flex: 1, margin: 0, justifyContent: 'center' }}
+            >
+              Cancel
+            </button>
+          )}
+        </div>
       </form>
+    </>
+  );
+
+  if (editingTransaction) {
+    return <div className="modal-form-wrapper">{formContent}</div>;
+  }
+
+  return (
+    <div className="glass-panel form-card">
+      {formContent}
     </div>
   );
 }

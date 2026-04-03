@@ -159,9 +159,9 @@
 }
 
 .all-time-btn.active {
-  background: rgba(129, 140, 248, 0.15);
+  background: color-mix(in srgb, var(--accent-primary), transparent 85%);
   color: var(--accent-primary);
-  border-color: rgba(129, 140, 248, 0.3);
+  border-color: color-mix(in srgb, var(--accent-primary), transparent 70%);
 }
 
 .month-group {
@@ -545,6 +545,38 @@
 .profile-security-box p {
   font-size: 0.9rem;
   color: var(--text-muted);
+}
+
+/* Settings Styles */
+.settings-group {
+  margin-bottom: 0.5rem;
+}
+
+.theme-toggle-btn {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.theme-toggle-btn:hover {
+  background: var(--panel-bg-hover) !important;
+  color: var(--accent-primary) !important;
+}
+
+.theme-toggle-btn.active {
+  border-color: var(--accent-primary) !important;
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent-primary), transparent 80%);
+}
+
+.palette-btn {
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.palette-btn:hover {
+  transform: scale(1.15);
+}
+
+.palette-btn.active {
+  transform: scale(1.25);
+  box-shadow: 0 0 15px var(--accent-primary);
 }
 
 

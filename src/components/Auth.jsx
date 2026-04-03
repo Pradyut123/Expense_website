@@ -93,6 +93,7 @@ function Auth({ onAuthSuccess }) {
       if (isValid) {
         // Only return non-sensitive fields to main state
         onAuthSuccess({
+          id: userDoc._id,
           name: userDoc.name,
           username: userDoc.username,
           email: userDoc.email

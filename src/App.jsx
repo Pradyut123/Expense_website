@@ -3,6 +3,7 @@ import Sidebar from './components/Sidebar';
 import Dashboard from './components/Dashboard';
 import MonthView from './components/MonthView';
 import UserProfile from './components/UserProfile';
+import ExpenseForm from './components/ExpenseForm';
 import Auth from './components/Auth';
 import { Menu, X } from 'lucide-react';
 import { client } from './sanityClient';
@@ -28,12 +29,69 @@ function App() {
   const [filterMonth, setFilterMonth] = useState(new Date().getMonth());
   const [filterYear, setFilterYear] = useState(new Date().getFullYear());
 
+  // Theme & Palette State
+  const [theme, setTheme] = useState(() => localStorage.getItem('app-theme') || 'dark');
+  const [palette, setPalette] = useState(() => localStorage.getItem('app-palette') || 'indigo');
+
+  // Apply Theme & Palette
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', theme);
+    window.localStorage.setItem('app-theme', theme);
+  }, [theme]);
+
+  useEffect(() => {
+    document.documentElement.setAttribute('data-palette', palette);
+    window.localStorage.setItem('app-palette', palette);
+  }, [palette]);
+
+  // Sync Profile with Sanity on load for real-time accuracy across all fields
+  useEffect(() => {
+    if (user?.username || user?.id) {
+      // Use the stable Sanity ID if we have it, otherwise fallback to username
+      const query = user?.id 
+        ? `*[_type == "user" && _id == $id][0]` 
+        : `*[_type == "user" && username == $username][0]`;
+      
+      const params = user?.id 
+        ? { id: user.id } 
+        : { username: user?.username };
+
+      client.fetch(query, params)
+      .then((updatedUser) => {
+        if (updatedUser) {
+          const refined = {
+            id: updatedUser._id, // Ensure we capture the ID for future sync stability
+            name: updatedUser.name,
+            username: updatedUser.username,
+            email: updatedUser.email
+          };
+          
+          // Detect changes across all critical fields
+          const hasChanged = 
+            refined.name !== user.name || 
+            refined.email !== user.email || 
+            refined.username !== user.username ||
+            !user.id; // Also trigger if we were missing the ID locally
+
+          if (hasChanged) {
+            setUser(refined);
+            localStorage.setItem('expense-profile', JSON.stringify(refined));
+          }
+        }
+      })
+      .catch(e => console.error("Profile sync error:", e));
+    }
+  }, []); 
+
   // Fetch Sanity Data on Load
   useEffect(() => {
     if (user) {
       setLoading(true);
-      // Query filters strictly for this user's records
-      client.fetch(`*[_type == "expense" && author == "${user.username}"] | order(date desc)`)
+      // Improved query that checks via permanent ID OR known usernames for robust recovery
+      client.fetch(`*[_type == "expense" && (userId == $userId || author == "praddy" || author == "pradyut" || author == $username)] | order(date desc)`, { 
+        userId: user.id,
+        username: user.username 
+      })
         .then((data) => {
           setTransactions(data);
           setLoading(false);
@@ -51,7 +109,8 @@ function App() {
         _type: 'expense',
         ...transaction,
         id: undefined, // Let sanity control _id natively
-        author: user.username
+        author: user.username,
+        userId: user.id // Save the unique stable ID
       };
       const res = await client.create(doc);
       setTransactions([res, ...transactions]);
@@ -95,6 +154,7 @@ function App() {
 
   const handleAuthSuccess = (userData) => {
     setUser(userData);
+    window.localStorage.setItem('expense-profile', JSON.stringify(userData));
   };
 
   const handleLogout = () => {
@@ -132,6 +192,11 @@ function App() {
         onLogout={handleLogout}
         isOpen={isSidebarOpen}
         onClose={() => setSidebarOpen(false)}
+        theme={theme}
+        setTheme={setTheme}
+        palette={palette}
+        setPalette={setPalette}
+        transactions={transactions}
       />
       
       <main className="main-content-area">
@@ -183,6 +248,29 @@ function App() {
           <UserProfile user={user} />
         )}
       </main>
+
+      {/* Edit Transaction Modal */}
+      {editingTransaction && (
+        <div className="modal-overlay">
+          <div className="modal-content glass-panel" style={{ padding: '2rem', maxWidth: '450px', width: '90%' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
+              <h2 style={{ fontSize: '1.25rem', fontWeight: '600' }}>Edit Transaction</h2>
+              <button 
+                onClick={() => setEditingTransaction(null)}
+                style={{ background: 'transparent', color: 'var(--text-muted)' }}
+              >
+                <X size={24} />
+              </button>
+            </div>
+            <ExpenseForm 
+              addTransaction={addTransaction} 
+              updateTransaction={updateTransaction} 
+              editingTransaction={editingTransaction}
+              setEditingTransaction={setEditingTransaction}
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 }
