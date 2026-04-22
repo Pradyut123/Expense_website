@@ -16,6 +16,9 @@ function App() {
   });
 
   const [transactions, setTransactions] = useState(() => {
+    const profile = localStorage.getItem('expense-profile');
+    if (!profile) return [];
+    
     const saved = localStorage.getItem('expense-transactions');
     return saved ? JSON.parse(saved) : [];
   });
@@ -88,7 +91,7 @@ function App() {
     if (user) {
       setLoading(true);
       // Improved query that checks via permanent ID OR known usernames for robust recovery
-      client.fetch(`*[_type == "expense" && (userId == $userId || author == "praddy" || author == "pradyut" || author == $username)] | order(date desc)`, { 
+      client.fetch(`*[_type == "expense" && (userId == $userId || (author == $username && !defined(userId)))] | order(date desc)`, { 
         userId: user.id,
         username: user.username 
       })
@@ -160,6 +163,7 @@ function App() {
   const handleLogout = () => {
     setUser(null);
     localStorage.removeItem('expense-profile');
+    localStorage.removeItem('expense-transactions'); 
   };
 
   if (!user) {
