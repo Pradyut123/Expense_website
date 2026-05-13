@@ -45,7 +45,7 @@ function UserProfile({ user }) {
         </div>
 
         <div className="profile-security-box">
-          <Shield size={20} color="var(--warning)" />
+          <Shield size={20} color="var(--accent-secondary)" />
           <p>
             Your account is secured via Sanity Database architecture.
           </p>

@@ -18,7 +18,7 @@ const categoryIcons = {
 function ExpenseList({ transactions, onDelete, onEdit }) {
   if (transactions.length === 0) {
     return (
-      <div className="glass-panel list-card" style={{ marginTop: '2rem' }}>
+      <div className="glass-panel list-card">
         <h2 className="list-header" style={{ marginBottom: 0, border: 'none' }}>Recent Transactions</h2>
         <div className="empty-state">
           <Activity size={48} />
@@ -29,7 +29,7 @@ function ExpenseList({ transactions, onDelete, onEdit }) {
   }
 
   return (
-    <div className="glass-panel list-card" style={{ marginTop: '2rem' }}>
+    <div className="glass-panel list-card">
       <h2 className="list-header">Recent Transactions</h2>
       <div className="transaction-list">
         {transactions.map(t => {
@@ -58,7 +58,7 @@ function ExpenseList({ transactions, onDelete, onEdit }) {
                 {t.type === 'expense' ? '-' : '+'}₹{t.amount.toFixed(2)}
               </div>
               <div style={{ display: 'flex', gap: '0.25rem' }}>
-                <button className="delete-btn" title="Edit" onClick={() => onEdit(t)}>
+                <button className="edit-btn" title="Edit" onClick={() => onEdit(t)}>
                   <Edit2 size={16} />
                 </button>
                 <button className="delete-btn" title="Delete" onClick={() => onDelete(key)}>
@@ -67,7 +67,7 @@ function ExpenseList({ transactions, onDelete, onEdit }) {
               </div>
             </div>
           </div>
-        );
+          );
       })}
       </div>
     </div>

@@ -39,4 +39,4 @@ function SummaryCards({ balance, income, expense }) {
   );
 }
 
-export default SummaryCards;
+export default React.memo(SummaryCards);

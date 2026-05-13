@@ -332,7 +332,7 @@ function Auth({ onAuthSuccess }) {
           /* 2. LOGIN / REGISTER FLOW */
           <form onSubmit={isLogin ? handleLogin : handleRegister} style={{ textAlign: 'left' }}>
             {!isLogin && (
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1.25rem' }}>
+              <div className="auth-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1.25rem' }}>
                 <div className="form-group">
                   <label>Full Name</label>
                   <input type="text" placeholder="John" value={name} onChange={(e) => setName(e.target.value)} required />

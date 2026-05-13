@@ -102,6 +102,14 @@
   }
 }
 
+.app-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2.5rem;
+  padding: 0.75rem 1.5rem;
+}
+
 .header-left {
   display: flex;
   align-items: center;
@@ -579,4 +587,166 @@
   box-shadow: 0 0 15px var(--accent-primary);
 }
 
+/* ── Sidebar Actions (desktop) ───────────────────────── */
+.sidebar-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
 
+/* ── Filter Bar (Month View) ─────────────────────────── */
+.filter-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem 1.5rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.filter-bar-left {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.filter-bar-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.filter-selects {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.filter-selects select {
+  padding: 8px 12px;
+  font-size: 0.9rem;
+}
+
+.filter-label {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-main);
+}
+
+.filter-nav-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--panel-border);
+  color: var(--text-muted);
+  flex-shrink: 0;
+}
+
+.filter-nav-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--text-main);
+}
+
+@media (max-width: 600px) {
+  .filter-bar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 1rem;
+  }
+
+  .filter-bar-controls {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .filter-selects {
+    flex: 1;
+  }
+
+  .filter-selects select {
+    width: 100%;
+  }
+}
+
+/* ── Month Summary Cards spacing ─────────────────────── */
+.month-summary-cards {
+  margin-bottom: 2rem;
+}
+
+/* ── Edit Button ─────────────────────────────────────── */
+.edit-btn {
+  background: transparent;
+  color: var(--text-muted);
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.edit-btn:hover {
+  background: color-mix(in srgb, var(--accent-primary), transparent 85%);
+  color: var(--accent-primary);
+}
+
+/* ── Profile Title ───────────────────────────────────── */
+.profile-title {
+  font-size: 1.75rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  background: linear-gradient(135deg, var(--text-main), var(--accent-secondary));
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  letter-spacing: -0.5px;
+}
+
+/* ── Auth Form Stacking ────────────────────────────── */
+@media (max-width: 480px) {
+  .auth-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* ── Performance & Optimization ─────────────────────── */
+.loading-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  width: 100%;
+  color: var(--text-muted);
+  gap: 1rem;
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* GPU acceleration for common animations */
+.glass-panel, .summary-card, .list-item {
+  will-change: transform, opacity;
+}
+
+/* Smooth transition for tab content */
+.main-content-area > div {
+  animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
